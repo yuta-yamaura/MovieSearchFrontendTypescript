@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { LoadMoreButton } from "../../atoms/LoadMoreButton/LoadMoreButton";
-import { SelectYear } from "../../atoms/SelectYear/SelectYear";
+import {
+  SelectYear,
+  yearSchema,
+  type ValidYear,
+} from "../../atoms/SelectYear/SelectYear";
 import { SearchInput } from "../../atoms/SearchInput/SearchInput";
 import { MovieList } from "../../molecules/MovieList/MovieList";
 import "./MovieSearch.css";
@@ -13,7 +17,7 @@ export const MovieSearch = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [selectedYear, setSelectedYear] = useState<string>("2023");
+  const [selectedYear, setSelectedYear] = useState<ValidYear>("2023");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const fetchMovies = async (page: number) => {
@@ -46,9 +50,11 @@ export const MovieSearch = () => {
   };
 
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const year = e.target.value;
-    setSelectedYear(year);
-    navigate(`/${year}`);
+    const resultYear = yearSchema.safeParse(e.target.value);
+    if (resultYear.success) {
+      setSelectedYear(resultYear.data);
+      navigate(`/${resultYear}`);
+    }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

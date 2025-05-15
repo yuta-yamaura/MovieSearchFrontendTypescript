@@ -1,7 +1,12 @@
 import type { ChangeEventHandler } from "react";
+import { z } from "zod";
+
+const VALUES = ["2020", "2021", "2022", "2023", "2024"] as const;
+export const yearSchema = z.enum(VALUES);
+export type ValidYear = z.infer<typeof yearSchema>;
 
 type SelectYearProps = {
-  selectedYear: string;
+  selectedYear: ValidYear;
   handleYearChange: ChangeEventHandler<HTMLSelectElement>;
 };
 
@@ -11,11 +16,11 @@ export const SelectYear = ({
 }: SelectYearProps) => {
   return (
     <select value={selectedYear} onChange={handleYearChange}>
-      <option value="2020">2020年</option>
-      <option value="2021">2021年</option>
-      <option value="2022">2022年</option>
-      <option value="2023">2023年</option>
-      <option value="2024">2024年</option>
+      {VALUES.map((year) => (
+        <option key={year} value={year}>
+          {year}年
+        </option>
+      ))}
     </select>
   );
 };
