@@ -1,27 +1,19 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { MovieSearch } from "./components/organisms/MovieSearch/MovieSearch";
+import { MovieSearchYear } from "./components/organisms/MovieSearch/MovieSearchYear";
+import { MovieSearchQuery } from "./components/organisms/MovieSearch/MovieSearchQuery";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank"></a>
-        <a href="https://react.dev" target="_blank"></a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <BrowserRouter>
+      <main>
+        <Routes>
+          <Route path="/" element={<MovieSearch />} />
+          <Route path="/:year" element={<MovieSearchYear />} />
+          <Route path="/:year/:query" element={<MovieSearchQuery />} />
+        </Routes>
+      </main>
+    </BrowserRouter>
   );
 }
 

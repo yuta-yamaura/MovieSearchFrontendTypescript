@@ -1,0 +1,45 @@
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+/* 画面幅が1200px以下の場合、3列表示 */
+@media screen and (max-width: 1200px) {
+  .movie-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 画面幅が900px以下の場合、2列表示 */
+@media screen and (max-width: 900px) {
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 画面幅が600px以下の場合、1列表示 */
+@media screen and (max-width: 600px) {
+  .movie-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .search-container input {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
