@@ -32,12 +32,13 @@ export const MovieSearch = () => {
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const resultYear = yearSchema.safeParse(e.target.value);
     const query = e.target.value;
     setSearchQuery(query);
     if (query) {
-      navigate(`/${selectedYear}/${query}`);
+      navigate(`/${resultYear.data}/${query}`);
     } else {
-      navigate(`/${selectedYear}`);
+      navigate(`/${resultYear.data}`);
     }
   };
 

@@ -17,24 +17,10 @@ export const useMovieSearch = ({
   const [movies, setMovies] = useState<Movie[]>([]);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  useEffect(() => {
-    fetchMovies(currentPage);
-  }, [currentPage, year]);
-
-  useEffect(() => {
-    fetchMovies(currentPage);
-  }, [query]);
-
-  const fetchMovies = async (page: number) => {
+  const fetchSelectedYearMovies = async (page: number) => {
     try {
-      const params = new URLSearchParams({
-        year,
-        query: page.toString(),
-        ...(query && { query }),
-      });
-
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/movies/?${params}`
+        `${import.meta.env.VITE_API_URL}/api/movies/?year=${year}&page=${page}`
       );
       const data = response.data;
 
@@ -49,6 +35,37 @@ export const useMovieSearch = ({
       console.error("Error fetching movies:", error);
     }
   };
+
+  const fetchSelectedKeywordMovies = async (page: number) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/movies/?page=${page}&year=${year}&query=${query}`
+      );
+      const data = response.data;
+
+      if (page === 1) {
+        setMovies(data.results);
+      } else {
+        setMovies((prevMovies) => [...prevMovies, ...data.results]);
+      }
+      // 最後のページ数をセット
+      setTotalPages(data.total_pages);
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSelectedYearMovies(currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    fetchSelectedYearMovies(1);
+  }, [year]);
+
+  useEffect(() => {
+    fetchSelectedKeywordMovies(1);
+  }, [year]);
 
   return {
     movies,
