@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { type ValidYear } from "../components/atoms/SelectYear/SelectYear";
-import type { Movie } from "../types/movies";
+import { moviesResponseSchema, type Movie } from "../types/movies";
 
 type MovieSearchProps = {
   year: ValidYear;
@@ -22,6 +22,10 @@ export const useMovieSearch = ({
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/movies/?year=${year}&page=${page}`
       );
+      const result = moviesResponseSchema.safeParse(response.data);
+      if (result.error) {
+        throw new Error("無効なレスポンスです");
+      }
       const data = response.data;
 
       if (page === 1) {
@@ -39,7 +43,9 @@ export const useMovieSearch = ({
   const fetchSelectedKeywordMovies = async (page: number) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/movies/?page=${page}&year=${year}&query=${query}`
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/movies/?page=${page}&year=${year}&query=${query}`
       );
       const data = response.data;
 
