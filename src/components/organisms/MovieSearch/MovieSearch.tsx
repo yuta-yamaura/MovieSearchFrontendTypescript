@@ -23,15 +23,21 @@ export const MovieSearch = () => {
     currentPage: currentPage,
   });
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const resultYear = yearSchema.safeParse(e.target.value);
     if (resultYear.success) {
       setSelectedYear(resultYear.data);
       navigate(`/${resultYear.data}`);
+    }
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    if (query) {
+      navigate(`/${selectedYear}/${query}`);
+    } else {
+      navigate(`/${selectedYear}`);
     }
   };
 

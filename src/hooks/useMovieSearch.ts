@@ -18,17 +18,23 @@ export const useMovieSearch = ({
   const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
-    fetchSelectedYearMovies(currentPage);
-  }, [currentPage]);
+    fetchMovies(currentPage);
+  }, [currentPage, year]);
 
   useEffect(() => {
-    fetchSelectedYearMovies(1);
-  }, [year]);
+    fetchMovies(currentPage);
+  }, [query]);
 
-  const fetchSelectedYearMovies = async (page: number) => {
+  const fetchMovies = async (page: number) => {
     try {
+      const params = new URLSearchParams({
+        year,
+        query: page.toString(),
+        ...(query && { query }),
+      });
+
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/movies/?year=${year}&page=${page}`
+        `${import.meta.env.VITE_API_URL}/api/movies/?${params}`
       );
       const data = response.data;
 
